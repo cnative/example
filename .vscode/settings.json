@@ -1,0 +1,9 @@
+{
+    "protoc": {
+        "path": "${workspaceRoot}/.tools/bin/protoc",
+        "options": [
+            "--proto_path=${workspaceRoot}/proto"
+        ]
+    },
+    "go.formatTool": "goimports"
+}

@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: self-signed-ca-issuer
+spec:
+  selfSigned: {}
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: self-signed-ca-cert
+spec:
+  secretName: self-signed-ca-tls-key
+  commonName: cnative-ca
+  isCA: true
+  issuerRef:
+    name: self-signed-ca-issuer
+    kind: Issuer

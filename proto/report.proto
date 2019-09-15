@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "api";
+
+package api;
+
+// Report Service
+
+service ReportService {
+	option (grpc.gateway.protoc_gen_swagger.options.openapiv2_tag) = {
+		description: "Report Service"
+		external_docs: {
+			url: "https://github.com/cnative/example";
+			description: "Find out more about";
+		}
+  };
+
+  rpc CreateReport(CreateReportRequest) returns (CreateReportResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/report"
+      body: "*"
+    };
+  }
+
+  rpc FilterReports(FilterReportsRequest) returns (FilterReportsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/report"
+    };
+  }
+
+  rpc GetReport(GetReportRequest) returns (GetReportResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/report/{id}"
+    };
+  }
+}
+
+// Create Report Requests
+
+message CreateReportRequest {
+  string name = 1;
+  map<string,string> labels = 2;
+}
+
+// Create Report Response
+
+message CreateReportResponse {
+  string id = 1;
+  string name = 2;
+  map<string,string> labels = 3;
+
+  string created_by = 51;
+  string updated_by = 52;
+  google.protobuf.Timestamp created_at = 53;
+  google.protobuf.Timestamp updated_at = 54;
+}
+
+// Filter report request
+
+message FilterReportsRequest {
+  string name = 1;
+  map<string,string> labels = 2;
+
+  int32 page = 11;
+  int32 page_size = 12;
+  repeated string sort_by = 13;
+  enum sort_order {
+    SORT_ASC = 0;
+    SORT_DESC = 1;
+  }
+  sort_order sorting_order = 14;
+}
+
+// Fitler reports response
+
+message FilterReportsResponse {
+  
+  message item {
+    string id = 1;
+    string name = 2;
+    map<string,string> labels = 3;
+  
+    string created_by = 51;
+    string updated_by = 52;
+    google.protobuf.Timestamp created_at = 53;
+    google.protobuf.Timestamp updated_at = 54;
+  }
+
+  repeated item reports = 1;
+}
+
+// Get Report Request
+
+message GetReportRequest {
+  string id = 1;
+}
+
+// Get Report Response
+
+message GetReportResponse {
+  string id = 1;
+  string name = 2;
+  map<string,string> labels = 3;
+
+  string created_by = 51;
+  string updated_by = 52;
+  google.protobuf.Timestamp created_at = 53;
+  google.protobuf.Timestamp updated_at = 54;
+}

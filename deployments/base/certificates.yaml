@@ -1,0 +1,22 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: controlplane-tls-cert
+spec:
+  commonName: controlplane
+  secretName: controlplane-tls-cert
+  issuerRef:
+    name: server-cert-issuer
+    Kind: Issuer
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: cnative-cli-cert
+spec:
+  commonName: integ-test
+  secretName: cnative-cli-tls-cert
+  issuerRef:
+    name: client-cert-issuer
+    kind: Issuer
+---

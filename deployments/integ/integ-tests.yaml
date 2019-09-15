@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: integ-test
+spec:
+  template:
+    spec:
+      volumes:
+      - name: tls-cert
+        secret:
+          secretName: cnative-cli-tls-cert
+      - name: tls-root-ca
+        secret:
+          secretName: self-signed-ca-tls-key
+          items:
+          - key: tls.crt
+            path: root-ca.crt
+      initContainers:
+      - name: setup
+        image: cnative-server:integ-tests
+        command: 
+          - /usr/bin/init.sh # test setup
+        env:
+          - name: CONTROLPLANE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: TLS_CERT_DIR
+            value: /etc/cnative/client/certs
+          - name: ROOT_CA_FILE
+            value: /etc/cnative/ca/root-ca.crt
+          - name: AUTH_PROVIDER
+            value: auth_provider
+          - name: AUTH_PROVIDER_ARGS
+            value: key1=val,key2=val
+        volumeMounts:
+        - name: tls-cert
+          mountPath: /etc/cnative/client/certs
+        - name: tls-root-ca
+          mountPath: /etc/cnative/ca
+      containers:
+      - name: cnative-integ-tests
+        image: cnative-server:integ-tests
+        # command:
+        #   - sleep
+        #   - "10000"
+        env:
+          - name: CONTROLPLANE_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: TLS_CERT_DIR
+            value: /etc/cnative/client/certs
+          - name: ROOT_CA_FILE
+            value: /etc/cnative/ca/root-ca.crt
+          - name: AUTH_PROVIDER
+            value: auth_provider
+          - name: AUTH_PROVIDER_ARGS
+            value: key1=val,key2=val
+        volumeMounts:
+        - name: tls-cert
+          mountPath: /etc/cnative/client/certs
+        - name: tls-root-ca
+          mountPath: /etc/cnative/ca
+      restartPolicy: Never
+      serviceAccountName: integ-test-sa
+  backoffLimit: 0

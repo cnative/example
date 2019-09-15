@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: e2e-tests
+
+commonLabels:
+  env: integ-test
+
+bases:
+- ../base
+
+resources:
+  - namespace.yaml
+  - service-account.yaml    # service account and cluster role binding needed to run integ-tests
+
+patchesStrategicMerge:
+  - certificates.yaml
+  - controlplane.yaml
+
+vars:
+- name: SERVICEACCOUNT_NAMESPACE
+  objref:
+    apiVersion: v1
+    kind: ServiceAccount
+    name: integ-test-sa
+  fieldref:
+    fieldpath: metadata.namespace
+
+images:
+- name: controlplane
+  newName: cnative-server
+  newTag: integ

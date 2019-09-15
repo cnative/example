@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: cnative
+
+commonLabels:
+  cloud: aws
+  env: production
+  region: us-west-2
+
+resources:
+- namespace.yaml
+- ../base
+
+patchesStrategicMerge:
+- certificates.yaml
+- controlplane.yaml
+- ingress.yaml
+- egress.yaml
+
+images:
+- name: controlplane
+- name: egress
+- name: ingress
