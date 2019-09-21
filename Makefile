@@ -54,7 +54,7 @@ benchmark: ; $(info $(M) benchmark …) @ ## run go benchmark
 	$Q CGO_ENABLED=1 go test -benchmem -bench . $(shell go list ./... | grep -v /tests/e2e)
 
 cluster-integ:
-	$Q CLUSTER_NAME=cnative-integ ./scripts/create_cluster.sh; $(info $(M) creating cnative-integ cluster `…)
+	$Q CLUSTER_NAME=cnative-integ ./scripts/create_cluster.sh; $(info $(M) creating cnative-integ cluster …)
 
 build-testbin-linux:
 	$Q mkdir -p ./bin/linux_amd64 && GOOS=linux GOARCH=amd64 go test -c -mod=vendor ./tests/e2e -o ./bin/linux_amd64/cnative-e2e-tests; $(info $(M) building e2e test binary for linux …)
@@ -63,15 +63,15 @@ e2e-tests:
 	$Q ./scripts/e2e_tests.sh; $(info $(M) running end to end tests `…)
 
 cluster-integ-delete:
-	$Q kind delete cluster --name cnative-integ ; $(info $(M) deleting cnative-integ cluster `…)
+	$Q kind delete cluster --name cnative-integ ; $(info $(M) deleting cnative-integ cluster …)
 
 cluster-local: local-certs ## start a local kubernetes cluster
 	$Q ./scripts/create_cluster.sh && \
-		KUBECONFIG=$(shell ${GOBIN}/kind get kubeconfig-path --name="cnative-local") kubectl apply -k deployment/dev \
+		KUBECONFIG=$(shell ${GOBIN}/kind get kubeconfig-path --name="cnative-local") kubectl apply -k deployments/localhost \
 	; $(info $(M) creating cnative-local cluster `…)
 
 cluster-local-delete: ## delete local kubernetes cluster
-	$Q kind delete cluster --name cnative-local ; $(info $(M) deleting cnative-local cluster `…)
+	$Q kind delete cluster --name cnative-local ; $(info $(M) deleting cnative-local cluster …)
 
 clean: ; $(info $(M) cleaning …)	@ ## cleanup everything
 	@rm -rf bin web/build
@@ -83,5 +83,10 @@ local-certs: ; $(info $(M) generating local certs …)	@ ## generate TLS certs f
 gen-web.go:
 	$Q ./scripts/gen-web.go.sh; $(info $(M) generating web.go..)
 
-build-ui: gen-ui ; $(info $(M) building ui... ) @ ## build ui service
-	$Q cd web && npm run-script build ; $(info $(M) running npm build `…)
+install-ui-deps:
+	$Q cd web && npm install; $(info $(M) installing node_modules dependencies...)
+
+build-ui: install-ui-deps ; $(info $(M) building ui... ) @ ## build ui service
+	$Q cd web && npm run-script build ; $(info $(M) running npm build …)
+
+
