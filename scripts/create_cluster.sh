@@ -12,8 +12,11 @@ if test -f "$KUBECONFIG"; then
     echo "cluster already exists. use kubectl --kubeconfig=$KUBECONFIG to use the cluster"
 else
     ${ROOTDIR}/.tools/bin/kind create cluster --name ${CLUSTER_NAME}
+ 
+    $kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+    $kubectl wait --for=condition=available --timeout=600s deployment/local-path-provisioner --namespace local-path-storage
     n=0; until ((n >= 60)); do kubectl -n default get serviceaccount default -o name && break; n=$((n + 1)); sleep 1; done; ((n < 60))
-
+ 
     if [ "$CLUSTER_NAME" == "cnative-integ" ]; then
         # install cert-manager
         _cert_manager_ns=$(mktemp -d)/cert-manager-ns.yaml
