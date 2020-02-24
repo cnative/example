@@ -17,7 +17,7 @@ rm -rf ${_cert_dir} && mkdir -p ${_cert_dir}
 HOSTNAMES=localhost,127.0.0.1
 
 _expiry="720h"
-_ca_name="cnative-ca"
+_ca_name="example-app-ca"
 _algo="rsa"
 _size=2048
 
@@ -31,11 +31,11 @@ cat > ${_ca_config_json} <<EOF
       "expiry": "${_expiry}"
     },
     "profiles": {
-      "cnative-server": {
+      "example-app-server": {
         "usages": ["signing", "key encipherment", "server auth"],
         "expiry": "${_expiry}"
       },
-      "cnative-client": {
+      "example-app-client": {
         "usages": ["signing", "key encipherment", "client auth"],
         "expiry": "${_expiry}"
       }
@@ -57,8 +57,8 @@ cat > ${_ca_csr_json} <<EOF
       "C": "US",
       "ST": "California",
       "L": "San Francisco",
-      "O": "Salesforce",
-      "OU": "CNative"
+      "O": "Example",
+      "OU": "Example Inc"
     }
   ]
 }
@@ -71,7 +71,7 @@ $cfssl gencert -loglevel=5 -initca ${_ca_csr_json} | $cfssljson -bare ${_cert_di
 for server_component in reports-server; do
 cat > ${_tmpdir}/${server_component}-csr.json <<EOF
 {
-  "CN": "cnative-${server_component}",
+  "CN": "example-app-${server_component}",
   "key": {
     "algo": "${_algo}",
     "size": ${_size}
@@ -81,8 +81,8 @@ cat > ${_tmpdir}/${server_component}-csr.json <<EOF
       "C": "US",
       "ST": "California",
       "L": "San Francisco",
-      "O": "Salesforce",
-      "OU": "CNative"
+      "O": "Example",
+      "OU": "Example Inc"
     }
   ]
 }
@@ -95,17 +95,17 @@ $cfssl gencert \
   -ca-key=${_cert_dir}/ca/tls-key.pem \
   -config=${_ca_config_json} \
   -hostname=${HOSTNAMES} \
-  -profile=cnative-server \
+  -profile=example-app-server \
   -loglevel=5 \
   ${_tmpdir}/${server_component}-csr.json | $cfssljson -bare ${_cert_dir}/${server_component}/tls
 
 done
 
-# generate cnative client server
-for client_component in reports-server-cli; do
+# generate example-app client server
+for client_component in cli; do
 cat > ${_tmpdir}/${client_component}-csr.json <<EOF
 {
-  "CN": "cnative-${client_component}",
+  "CN": "example-app-${client_component}",
   "key": {
     "algo": "${_algo}",
     "size": ${_size}
@@ -115,8 +115,8 @@ cat > ${_tmpdir}/${client_component}-csr.json <<EOF
       "C": "US",
       "ST": "California",
       "L": "San Francisco",
-      "O": "Salesforce",
-      "OU": "CNative"
+      "O": "Example",
+      "OU": "Example Inc"
     }
   ]
 }
@@ -128,7 +128,7 @@ $cfssl gencert \
   -ca=${_cert_dir}/ca/tls.pem \
   -ca-key=${_cert_dir}/ca/tls-key.pem \
   -config=${_ca_config_json} \
-  -profile=cnative-client \
+  -profile=example-app-client \
   -loglevel=5 \
   ${_tmpdir}/${client_component}-csr.json | $cfssljson -bare ${_cert_dir}/${client_component}/tls
 

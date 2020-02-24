@@ -588,11 +588,11 @@ var fileDescriptor_3eedb623aa6ca98c = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ grpc.ClientConnInterface
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+const _ = grpc.SupportPackageIsVersion6
 
 // ReportServiceClient is the client API for ReportService service.
 //
@@ -604,10 +604,10 @@ type ReportServiceClient interface {
 }
 
 type reportServiceClient struct {
-	cc *grpc.ClientConn
+	cc grpc.ClientConnInterface
 }
 
-func NewReportServiceClient(cc *grpc.ClientConn) ReportServiceClient {
+func NewReportServiceClient(cc grpc.ClientConnInterface) ReportServiceClient {
 	return &reportServiceClient{cc}
 }
 
