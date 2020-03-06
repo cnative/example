@@ -6,6 +6,4 @@ commonLabels:
 
 resources:
 - certificate-issuers.yaml
-- certificates.yaml
 - self-signed-ca.yaml     # self signed cert ca for clients
-- controlplane.yaml

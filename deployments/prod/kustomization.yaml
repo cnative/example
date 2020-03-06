@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: prod-example-app
+
+commonLabels:
+  cloud: aws
+  env: production
+  region: us-west-2
+
+bases:
+  - ../example-app
+    
+resources:
+- namespace.yaml
+
+patchesStrategicMerge:
+- certificates.yaml
+- reports-server.yaml
+
+images:
+- name: reports-server

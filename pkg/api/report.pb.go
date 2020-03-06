@@ -534,7 +534,9 @@ func init() {
 	proto.RegisterMapType((map[string]string)(nil), "api.GetReportResponse.LabelsEntry")
 }
 
-func init() { proto.RegisterFile("report.proto", fileDescriptor_3eedb623aa6ca98c) }
+func init() {
+	proto.RegisterFile("report.proto", fileDescriptor_3eedb623aa6ca98c)
+}
 
 var fileDescriptor_3eedb623aa6ca98c = []byte{
 	// 736 bytes of a gzipped FileDescriptorProto

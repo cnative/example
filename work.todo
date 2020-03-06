@@ -1,5 +1,29 @@
-✔ Metrics Registration Views @done(19-09-14 16:16)
-✔ Insert / Lookup / Search of Reports @done(19-09-14 16:16)
-☐ Kind Setup
-    ☐ Include Postgres
-☐ Web App
+Roadmap :
+☐ Postgress operator
+☐ DB local to the namespace
+☐ Certs
+☐ Grafna Dashboard
+    ☐ Prometheus Install
+    ☐ Grafana Install
+
+-- O
+
+CP Server
+
+ - Cluster
+    -> Register
+    -> Update
+ - Tenant
+    -> Register
+
+ Cluster
+  - Name,
+    ID, 
+    Connect Info, 
+    TenantID
+
+ Stream
+  - StreamID, ClusterID, TenantID, Topic, Concurrency
+
+Ingestor
+   Reads Cluster Info and given streamID and send data

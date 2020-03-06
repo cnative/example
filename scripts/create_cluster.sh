@@ -2,6 +2,7 @@
 
 DIR="`dirname \"$0\"`"
 ROOTDIR="`( cd \"$DIR/../\" && pwd )`"  # normalized project root dir
+CERTMGR="https://github.com/jetstack/cert-manager/releases/download/v0.13.1/cert-manager.yaml"
 kubectl=${ROOTDIR}/.tools/bin/kubectl
 
 export KUBECONFIG=${ROOTDIR}/.tools/kubeconfig
@@ -12,5 +13,7 @@ fi
 
 # install cert-manager
 $kubectl create namespace cert-manager
-$kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.13.1/cert-manager.yaml
-$kubectl wait --for=condition=available --timeout=600s deployment/cert-manager deployment/cert-manager-webhook --namespace cert-manager
+$kubectl apply --validate=false -f ${CERTMGR}
+
+# install postgres-operator
+$kubectl apply -k ./deployments/postgres-operator

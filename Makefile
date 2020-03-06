@@ -4,13 +4,15 @@ export LD_FLAGS = -X "main.gitCommit=$(GIT_COMMIT)" -X "main.version=$(VERSION)"
 
 export GOBIN = $(abspath .)/.tools/bin
 export PATH := $(GOBIN):$(abspath .)/bin:$(PATH)
-export GO111MODULE=on
 export CGO_ENABLED=0
 export CLUSTER_NAME ?=example-app
 
 export V = 0
 export Q = $(if $(filter 1,$V),,@)
 export M = $(shell printf "\033[34;1m▶\033[0m")
+
+# Image URL to use all building/pushing image targets
+IMG ?= example-app:${VERSION}
 
 help:
 	@grep -E '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-25s\033[0m %s\n", $$1, $$2}'
@@ -82,4 +84,18 @@ install-ui-deps:
 build-ui: install-ui-deps ; $(info $(M) building ui... ) @ ## build ui service
 	$Q cd web && npm run-script build ; $(info $(M) running npm build …)
 
+# Build the docker image
+docker-build: build-linux;  ## build docker image
+	docker build --no-cache -t ${IMG} -f ./Dockerfile ./bin/linux_amd64
+
+build-and-load: docker-build ## build local image and load into local cluster
+	kind load docker-image ${IMG} --name ${CLUSTER_NAME} || docker push ${IMG}
+
+# Push the docker image
+docker-push: ## push docker image
+	docker push ${IMG}
+
+# deploy to local cluster
+deploy: build-and-load ## deploy to local cluster
+	$Q kubectl apply -k ./deployments/reports-server
 

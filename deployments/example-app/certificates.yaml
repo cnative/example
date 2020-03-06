@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: reports-server-tls-cert
+spec:
+  commonName: reports-server
+  secretName: reports-server-tls-cert
+  issuerRef:
+    name: server-cert-issuer
+    kind: Issuer
+

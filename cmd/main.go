@@ -53,10 +53,9 @@ func initConfig(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			return err
 		}
-
 		// Search config in home directory with name ".reports" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".example")
+		viper.SetConfigName(".example-app")
 	}
 
 	viper.SetEnvPrefix("example")
@@ -82,7 +81,7 @@ func initConfig(cmd *cobra.Command, args []string) error {
 
 func main() {
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.example.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.example-app.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, "print the version")
 
 	applyBaseServerConfig(rootCmd) // base server config

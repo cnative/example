@@ -61,14 +61,14 @@ __install_kind() {
     mv ./kind-${os}-amd64 ${ROOTDIR}/.tools/bin/kind
 }
 
-
 __install_kustomize() {
-    local kustomize_url=https://github.com/kubernetes-sigs/kustomize/releases/download/v${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_${os}_amd64
+    local asset=kustomize_v${KUSTOMIZE_VERSION}_${os}_amd64.tar.gz
+    local kustomize_url=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/${asset}
     echo "Download  $kustomize_url"
 
     curl -sLJO ${kustomize_url}
-    chmod +x ./kustomize_${KUSTOMIZE_VERSION}_${os}_amd64
-    mv ./kustomize_${KUSTOMIZE_VERSION}_${os}_amd64 ${ROOTDIR}/.tools/bin/kustomize
+    tar -C ${ROOTDIR}/.tools/bin -zxf ${asset}
+    rm -rf ${asset}
 }
 
 __install_migrate() {

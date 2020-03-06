@@ -10,11 +10,10 @@ bases:
 
 resources:
   - namespace.yaml
-  - service-account.yaml    # service account and cluster role binding needed to run integ-tests
 
 patchesStrategicMerge:
   - certificates.yaml
-  - controlplane.yaml
+  - reports-server.yaml
 
 vars:
 - name: SERVICEACCOUNT_NAMESPACE
@@ -26,6 +25,5 @@ vars:
     fieldpath: metadata.namespace
 
 images:
-- name: controlplane
-  newName: cnative-server
+- name: reports-server
   newTag: integ

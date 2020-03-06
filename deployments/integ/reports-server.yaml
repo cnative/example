@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports-server
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: reports-server
+        imagePullPolicy: Never
+        args: [
+          "--debug",
+          "reports"
+        ]

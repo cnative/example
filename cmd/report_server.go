@@ -314,7 +314,7 @@ func (r *reportsServer) GetReport(ctx context.Context, req *api.GetReportRequest
 
 func getStateStore(ctx context.Context, logger *log.Logger) (store state.Store, err error) {
 
-	ds := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", dbCfg.user, dbCfg.password, dbCfg.host, dbCfg.port, dbCfg.name)
+	ds := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=require", dbCfg.user, dbCfg.password, dbCfg.host, dbCfg.port, dbCfg.name)
 	logger.Infow("connecting to database", "datasource", ds)
 	store, err = state.NewPostgresStore(logger, ds)
 	if err != nil {

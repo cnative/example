@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports-server
+  labels:
+    app: example-app
+    service: reports
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-app
+      service: reports
+  template:
+    metadata:
+      labels:
+        app: example-app
+        service: reports
+      annotations:
+        prometheus.io/scrape: 'true'
+    spec:
+      volumes:
+      - name: tls-cert
+        secret:
+          secretName: reports-server-tls-cert
+      containers:
+      - name: reports-server
+        image: example-app:dev
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        args: [
+          "reports"
+        ]
+        env:
+          - name: EXAMPLE_TLS_CERT_FILE
+            value: /etc/reports-server/certs/tls.crt
+          - name: EXAMPLE_TLS_PRIVATE_KEY_FILE
+            value: /etc/reports-server/certs/tls.key
+          - name: EXAMPLE_REPORTS_DB_HOST
+            value: example-app-reports-db
+          - name: EXAMPLE_REPORTS_DB_NAME
+            value: reports
+          - name: EXAMPLE_REPORTS_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres.example-app-reports-db.credentials 
+                key: username
+          - name: EXAMPLE_REPORTS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres.example-app-reports-db.credentials 
+                key: password
+        volumeMounts:
+        - name: tls-cert
+          mountPath: /etc/reports-server/certs
+        ports:
+        - name: grpc
+          containerPort: 5601
+          protocol: TCP
+        - name: gw
+          containerPort: 5602
+          protocol: TCP
+        - name: health
+          containerPort: 4400
+          protocol: TCP
+        - name: metrics
+          containerPort: 9101
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /live
+            port: 4400
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 4400
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reports-server
+  labels:
+    app: example-app
+    service: reports
+spec:
+  ports:
+  - name: grpc
+    port: 5601
+    protocol: TCP
+    targetPort: 5601
+  - name: gw
+    port: 5602
+    protocol: TCP
+    targetPort: 5602
+  selector:
+    app: example-app
+    service: reports
