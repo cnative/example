@@ -56,8 +56,7 @@ require (
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.6.2
-	github.com/tidwall/gjson v1.6.0
-	github.com/tidwall/pretty v1.0.1 // indirect
+	github.com/tidwall/gjson v1.9.3
 	github.com/uudashr/gocognit v1.0.1 // indirect
 	github.com/zmap/zlint v1.0.1 // indirect
 	go.opencensus.io v0.22.3
