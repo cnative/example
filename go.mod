@@ -21,7 +21,7 @@ require (
 	github.com/go-critic/go-critic v0.4.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
-	github.com/gogo/protobuf v1.3.1 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang/mock v1.3.1
 	github.com/golang/protobuf v1.3.4
@@ -62,11 +62,8 @@ require (
 	github.com/zmap/zlint v1.0.1 // indirect
 	go.opencensus.io v0.22.3
 	go.uber.org/multierr v1.5.0 // indirect
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
-	golang.org/x/tools v0.0.0-20200305140159-d7d444866696
+	golang.org/x/tools v0.0.0-20210106214847-113979e3529a
 	google.golang.org/api v0.20.0 // indirect
 	google.golang.org/genproto v0.0.0-20200305110556-506484158171
 	google.golang.org/grpc v1.27.1
