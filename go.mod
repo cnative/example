@@ -62,11 +62,9 @@ require (
 	github.com/zmap/zlint v1.0.1 // indirect
 	go.opencensus.io v0.22.3
 	go.uber.org/multierr v1.5.0 // indirect
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
-	golang.org/x/tools v0.0.0-20200305140159-d7d444866696
+	golang.org/x/tools v0.1.12
 	google.golang.org/api v0.20.0 // indirect
 	google.golang.org/genproto v0.0.0-20200305110556-506484158171
 	google.golang.org/grpc v1.27.1
